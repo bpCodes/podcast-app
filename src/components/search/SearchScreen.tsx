@@ -1,13 +1,19 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Box, Text } from 'react-native-design-utility';
 // @ts-ignore
 import styled from 'styled-components/native';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { theme } from '../../constants/theme';
 import KeyboardDismissView from '../KeyboardDismissView';
-import { FlatList, StyleSheet } from 'react-native';
-import {SearchQuery, SearchQuery_search, SearchQueryVariables} from '../../types/graphql';
+import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
+import {
+  SearchQuery,
+  SearchQuery_search,
+  SearchQueryVariables,
+} from '../../types/graphql';
 import searchQuery from '../../graphql/query/searchQuery';
+import EmptySearch from './components/EmptySearch';
+import SearchTile from './components/SearchTile';
 
 const StyledInput = styled.TextInput`
   height: 44px;
@@ -19,8 +25,7 @@ const StyledInput = styled.TextInput`
 `;
 
 const SearchScreen = () => {
-
-  const [term, setTerm] = useState<String>('')
+  const [term, setTerm] = useState<string>('');
   const [search, { data, loading, error }] = useLazyQuery<
     SearchQuery,
     SearchQueryVariables
@@ -29,9 +34,7 @@ const SearchScreen = () => {
   const onSearch = async () => {
     try {
       await search({ variables: { term } });
-    } catch (err) {
-      console.error('error', err);
-    }
+    } catch (err) {}
   };
   return (
     <KeyboardDismissView>
@@ -46,32 +49,41 @@ const SearchScreen = () => {
             value={term}
           />
         </Box>
-        <FlatList<SearchQuery_search>
-          keyboardShouldPersistTaps="never"
-          style={s.list}
-          data={data?.search ?? []}
-          renderItem={({ item }) => (
-            <Box h={90} dir="row" align="center" px="sm">
-              <Box h={70} w={70} bg="blueLight" radius={10} mr={12} />
-              <Box>
-                <Text bold>Joe</Text>
-                <Text size="xs" color="grey">
-                  Subtitle
-                </Text>
-                <Text size="xs">400 episodes</Text>
-              </Box>
-            </Box>
-          )}
-          keyExtractor={(item) => String(item.id)}
-        />
+        {error ? (
+          <Box f={1} center>
+            <Text color="red">{error?.message}</Text>
+          </Box>
+        ) : (
+          <FlatList<SearchQuery_search>
+            keyboardShouldPersistTaps="never"
+            contentContainerStyle={s.listContentContainer}
+            ListHeaderComponent={
+              <>
+                {loading && (
+                  <Box f={1} center h={300}>
+                    <ActivityIndicator
+                      size="large"
+                      color={theme.color.blueLight}
+                    />
+                  </Box>
+                )}
+              </>
+            }
+            ListEmptyComponent={<>{!loading && <EmptySearch />}</>}
+            data={data?.search ?? []}
+            renderItem={({ item }) => <SearchTile item={item} />}
+            keyExtractor={(item) => String(item.feedUrl)}
+          />
+        )}
       </Box>
     </KeyboardDismissView>
   );
 };
 
 const s = StyleSheet.create({
-  list: {
-    minHeight: '100%',
+  listContentContainer: {
+    // minHeight: '100%',
+    paddingBottom: 90,
   },
 });
 
