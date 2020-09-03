@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Box, Text } from 'react-native-design-utility';
 // @ts-ignore
 import styled from 'styled-components/native';
+import { useLazyQuery } from '@apollo/react-hooks';
 import { theme } from '../../constants/theme';
 import KeyboardDismissView from '../KeyboardDismissView';
 import { FlatList, StyleSheet } from 'react-native';
+import {SearchQuery, SearchQuery_search, SearchQueryVariables} from '../../types/graphql';
+import searchQuery from '../../graphql/query/searchQuery';
 
 const StyledInput = styled.TextInput`
   height: 44px;
@@ -16,19 +19,38 @@ const StyledInput = styled.TextInput`
 `;
 
 const SearchScreen = () => {
+
+  const [term, setTerm] = useState<String>('')
+  const [search, { data, loading, error }] = useLazyQuery<
+    SearchQuery,
+    SearchQueryVariables
+  >(searchQuery);
+
+  const onSearch = async () => {
+    try {
+      await search({ variables: { term } });
+    } catch (err) {
+      console.error('error', err);
+    }
+  };
   return (
     <KeyboardDismissView>
       <Box f={1} bg="white">
         <Box h={50} w="100%" px="sm" my="sm">
           <StyledInput
+            onChangeText={setTerm}
             selectionColor={theme.color.blueLight}
             placeholder="Search Podcast"
+            autoCorrect={false}
+            onSubmitEditing={onSearch}
+            value={term}
           />
         </Box>
-        <FlatList
+        <FlatList<SearchQuery_search>
+          keyboardShouldPersistTaps="never"
           style={s.list}
-          data={[{ id: 1 }, { id: 2 }]}
-          renderItem={() => (
+          data={data?.search ?? []}
+          renderItem={({ item }) => (
             <Box h={90} dir="row" align="center" px="sm">
               <Box h={70} w={70} bg="blueLight" radius={10} mr={12} />
               <Box>
