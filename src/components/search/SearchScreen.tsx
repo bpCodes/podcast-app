@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Text } from 'react-native-design-utility';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 // @ts-ignore
 import styled from 'styled-components/native';
 import { useLazyQuery } from '@apollo/react-hooks';
@@ -18,9 +19,6 @@ import SearchTile from './components/SearchTile';
 const StyledInput = styled.TextInput`
   height: 44px;
   flex: 1;
-  background-color: ${theme.color.greyLightest};
-  border-radius: 4px;
-  padding: 0 ${theme.space.sm}px;
   font-size: ${theme.text.size.md}px;
 `;
 
@@ -40,14 +38,29 @@ const SearchScreen = () => {
     <KeyboardDismissView>
       <Box f={1} bg="white">
         <Box h={50} w="100%" px="sm" my="sm">
-          <StyledInput
-            onChangeText={setTerm}
-            selectionColor={theme.color.blueLight}
-            placeholder="Search Podcast"
-            autoCorrect={false}
-            onSubmitEditing={onSearch}
-            value={term}
-          />
+          <Box
+            dir="row"
+            align="center"
+            h={40}
+            bg="greyLightest"
+            radius={4}
+            px="sm">
+            <Box mr={12}>
+              <FeatherIcon
+                name="search"
+                size={24}
+                color={theme.color.greyDark}
+              />
+            </Box>
+            <StyledInput
+              onChangeText={setTerm}
+              selectionColor={theme.color.blueLight}
+              placeholder="Search Podcast"
+              autoCorrect={false}
+              onSubmitEditing={onSearch}
+              value={term}
+            />
+          </Box>
         </Box>
         {error ? (
           <Box f={1} center>

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box, Text } from 'react-native-design-utility';
 import { RouteProp, useRoute } from '@react-navigation/native';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 import { SearchStackRouteParamsList } from '../../navigators/types';
 import { FlatList, Image, StyleSheet } from 'react-native';
+import { theme } from '../../constants/theme';
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>;
 const PodcastDetailsScreen = () => {
@@ -13,7 +15,10 @@ const PodcastDetailsScreen = () => {
         <FlatList
           ItemSeparatorComponent={() => (
             <Box w="100%" px="sm" my="sm">
-              <Box style={{ height: StyleSheet.hairlineWidth }} bg="greyLighter" />
+              <Box
+                style={{ height: StyleSheet.hairlineWidth }}
+                bg="greyLighter"
+              />
             </Box>
           )}
           ListHeaderComponent={
@@ -39,8 +44,18 @@ const PodcastDetailsScreen = () => {
                   </Text>
                 </Box>
               </Box>
-              <Box px="sm" mb="md">
-                <Text>Play last episode</Text>
+              <Box dir="row" px="sm" mb="md" align="center">
+                <Box mr={12}>
+                  <FeatherIcon
+                    name="play"
+                    size={30}
+                    color={theme.color.blueLight}
+                  />
+                </Box>
+                <Box>
+                  <Text bold>Play</Text>
+                  <Text size="sm">#300 - Last Episode</Text>
+                </Box>
               </Box>
               <Box px="sm" mb="md">
                 <Text bold size="lg">
