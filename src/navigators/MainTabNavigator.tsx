@@ -1,12 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from '@react-navigation/stack';
-import {View, Text} from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import ListenNowScreen from '../components/listenNow/ListenNowScreen';
 import SearchScreen from '../components/search/SearchScreen';
 import LibraryScreen from '../components/library/LibraryScreen';
+import PodcastDetailsScreen from '../components/pocastDetails/PodcastDetailsScreen';
+import { theme } from '../constants/theme';
 
 const ListenNowStack = createStackNavigator();
 
@@ -28,8 +28,18 @@ const SearchStack = createStackNavigator();
 
 const SearchStackNavigator = () => {
   return (
-    <SearchStack.Navigator>
+    <SearchStack.Navigator
+      screenOptions={{
+        headerTintColor: theme.color.blueLight,
+      }}>
       <SearchStack.Screen name="Search" component={SearchScreen} />
+      <SearchStack.Screen
+        options={{
+          headerTitle: '',
+        }}
+        name="PodcastDetails"
+        component={PodcastDetailsScreen}
+      />
     </SearchStack.Navigator>
   );
 };
