@@ -8,7 +8,7 @@ import { ActivityIndicator, FlatList, Image, StyleSheet } from 'react-native';
 import { theme } from '../../constants/theme';
 import { FeedQuery, FeedQueryVariables } from '../../types/graphql';
 import feedQuery from '../../graphql/query/feedQuery';
-import {getWeekDay, humanDuration} from "../../lib/dateTimeHelper";
+import { getWeekDay, humanDuration } from '../../lib/dateTimeHelper';
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>;
 const PodcastDetailsScreen = () => {
