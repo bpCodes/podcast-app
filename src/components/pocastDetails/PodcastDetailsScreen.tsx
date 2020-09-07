@@ -8,6 +8,7 @@ import { ActivityIndicator, FlatList, Image, StyleSheet } from 'react-native';
 import { theme } from '../../constants/theme';
 import { FeedQuery, FeedQueryVariables } from '../../types/graphql';
 import feedQuery from '../../graphql/query/feedQuery';
+import {getWeekDay, humanDuration} from "../../lib/dateTimeHelper";
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>;
 const PodcastDetailsScreen = () => {
@@ -85,14 +86,14 @@ const PodcastDetailsScreen = () => {
           renderItem={({ item }) => (
             <Box px="sm">
               <Text size="sm" color="grey">
-                {item.pubDate}
+                {getWeekDay(new Date(item.pubDate)).toUpperCase()}
               </Text>
               <Text bold>{item.title}</Text>
               <Text size="sm" color="grey" numberOfLines={2}>
                 {item.description}
               </Text>
               <Text size="sm" color="grey">
-                3hrs. 13min
+                {humanDuration(item.duration)}
               </Text>
             </Box>
           )}
