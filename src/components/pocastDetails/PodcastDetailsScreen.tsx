@@ -4,21 +4,29 @@ import { RouteProp, useRoute } from '@react-navigation/native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import { useQuery } from '@apollo/react-hooks';
 import { SearchStackRouteParamsList } from '../../navigators/types';
-import { ActivityIndicator, FlatList, Image, StyleSheet } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import { theme } from '../../constants/theme';
 import { FeedQuery, FeedQueryVariables } from '../../types/graphql';
 import feedQuery from '../../graphql/query/feedQuery';
 import { getWeekDay, humanDuration } from '../../lib/dateTimeHelper';
+import { usePlayerContext } from '../../contexts/PlayerContext';
 
 type NavigationParams = RouteProp<SearchStackRouteParamsList, 'PodcastDetails'>;
 const PodcastDetailsScreen = () => {
+  const playerContext = usePlayerContext();
   const { data: podcastData } = useRoute<NavigationParams>().params ?? {};
   const { data, loading } = useQuery<FeedQuery, FeedQueryVariables>(feedQuery, {
     variables: {
       feedUrl: podcastData.feedUrl,
     },
   });
-
+  console.log(playerContext)
   return (
     <>
       <Box f={1} bg="white">
@@ -56,11 +64,35 @@ const PodcastDetailsScreen = () => {
               </Box>
               <Box dir="row" px="sm" mb="md" align="center">
                 <Box mr={12}>
-                  <FeatherIcon
-                    name="play"
-                    size={30}
-                    color={theme.color.blueLight}
-                  />
+                  <TouchableOpacity
+                    onPress={() => {
+                      const el = data?.feed[0];
+                      if (!el) {
+                        return;
+                      }
+                      playerContext.play({
+                        title: el.title,
+                        artwork: el.image ?? podcastData.thumbnail,
+                        id: el.linkUrl,
+                        url: el.linkUrl,
+                        artist: podcastData.artist,
+                      });
+                    }}>
+                    {(playerContext.isPaused || playerContext.isEmpty) && (
+                      <FeatherIcon
+                        name="play"
+                        size={30}
+                        color={theme.color.blueLight}
+                      />
+                    )}
+                    {playerContext.isPlaying && (
+                      <FeatherIcon
+                        name="pause"
+                        size={30}
+                        color={theme.color.blueLight}
+                      />
+                    )}
+                  </TouchableOpacity>
                 </Box>
                 <Box f={1}>
                   <Text bold>Play</Text>

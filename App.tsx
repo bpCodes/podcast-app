@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import { UtilityThemeProvider } from 'react-native-design-utility';
+import { UtilityThemeProvider, Box } from 'react-native-design-utility';
 import { NavigationContainer } from '@react-navigation/native';
 import { ApolloProvider } from '@apollo/react-hooks';
 import TrackPlayer from 'react-native-track-player';
@@ -8,7 +8,6 @@ import TrackPlayer from 'react-native-track-player';
 import { theme } from './src/constants/theme';
 import MainStackNavigator from './src/navigators/MainStackNavigator';
 import { client } from './src/graphql/client';
-import trackPlayerServices from './src/services/trackPlayerServices';
 import { ActivityIndicator } from 'react-native';
 import { PlayerContextProvider } from './src/contexts/PlayerContext';
 
@@ -18,7 +17,9 @@ const App = () => {
   useEffect(() => {
     TrackPlayer.setupPlayer().then(() => {
       console.log('player setup');
-      TrackPlayer.registerPlaybackService(() => trackPlayerServices);
+      TrackPlayer.updateOptions({
+        capabilities: []
+      })
       setIsReady(true);
     });
   }, []);
