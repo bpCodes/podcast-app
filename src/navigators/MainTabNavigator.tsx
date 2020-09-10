@@ -12,6 +12,7 @@ import LibraryScreen from '../components/library/LibraryScreen';
 import PodcastDetailsScreen from '../components/pocastDetails/PodcastDetailsScreen';
 import { theme } from '../constants/theme';
 import MiniPlayer from '../components/miniplayer/MiniPlayer';
+import EpisodeDetailsScreen from '../components/episodeDetails/EpisodeDetailsScreen';
 
 const ListenNowStack = createStackNavigator();
 
@@ -29,6 +30,22 @@ const ListenNowStackNavigator = () => {
   );
 };
 
+const PodcastStack = createStackNavigator();
+
+const PodcastStackNavigator = () => {
+  return (
+    <PodcastStack.Navigator>
+      <PodcastStack.Screen
+        name="PodcastDetails"
+        component={PodcastDetailsScreen}
+      />
+      <PodcastStack.Screen
+        name="EpisodeDetails"
+        component={EpisodeDetailsScreen}
+      />
+    </PodcastStack.Navigator>
+  );
+};
 const SearchStack = createStackNavigator();
 
 const SearchStackNavigator = () => {
@@ -42,9 +59,10 @@ const SearchStackNavigator = () => {
       <SearchStack.Screen
         options={{
           headerTitle: '',
+          headerBackTitle: 'Back',
         }}
         name="PodcastDetails"
-        component={PodcastDetailsScreen}
+        component={PodcastStackNavigator}
       />
     </SearchStack.Navigator>
   );

@@ -18,8 +18,15 @@ const App = () => {
     TrackPlayer.setupPlayer().then(() => {
       console.log('player setup');
       TrackPlayer.updateOptions({
-        capabilities: []
-      })
+        capabilities: [
+          TrackPlayer.CAPABILITY_PLAY,
+          TrackPlayer.CAPABILITY_PAUSE,
+          TrackPlayer.CAPABILITY_STOP,
+          TrackPlayer.CAPABILITY_JUMP_FORWARD,
+          TrackPlayer.CAPABILITY_JUMP_BACKWARD,
+        ],
+        jumpInterval: 30,
+      });
       setIsReady(true);
     });
   }, []);
