@@ -24,10 +24,7 @@ const SearchTile: React.FC<Props> = (props) => {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('PodcastDetails', {
-              screen: 'PodcastDetails',
-              params: {
-                data: props.item,
-              },
+              data: props.item,
             })
           }>
           <Text size="xs">{props.item.episodesCount} episodes</Text>

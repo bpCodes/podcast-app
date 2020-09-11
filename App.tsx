@@ -10,6 +10,7 @@ import MainStackNavigator from './src/navigators/MainStackNavigator';
 import { client } from './src/graphql/client';
 import { ActivityIndicator } from 'react-native';
 import { PlayerContextProvider } from './src/contexts/PlayerContext';
+import { DBProvider } from './src/contexts/DbContext';
 
 const App = () => {
   const [isReady, setIsReady] = useState<boolean>(false);
@@ -33,19 +34,21 @@ const App = () => {
 
   return (
     <UtilityThemeProvider theme={theme}>
-      <ApolloProvider client={client}>
-        {isReady ? (
-          <PlayerContextProvider>
-            <NavigationContainer>
-              <MainStackNavigator />
-            </NavigationContainer>
-          </PlayerContextProvider>
-        ) : (
-          <Box f={1} center>
-            <ActivityIndicator />
-          </Box>
-        )}
-      </ApolloProvider>
+      <DBProvider>
+        <ApolloProvider client={client}>
+          {isReady ? (
+            <PlayerContextProvider>
+              <NavigationContainer>
+                <MainStackNavigator />
+              </NavigationContainer>
+            </PlayerContextProvider>
+          ) : (
+            <Box f={1} center>
+              <ActivityIndicator />
+            </Box>
+          )}
+        </ApolloProvider>
+      </DBProvider>
     </UtilityThemeProvider>
   );
 };
